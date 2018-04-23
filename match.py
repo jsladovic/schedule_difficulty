@@ -34,6 +34,11 @@ class Match:
     def __ne__(self, other):
         return not self.__eq__(other)
 
+    def is_home_team(self, team):
+        if self.home_team == team:
+            return True
+        return False
+
     def other_team(self, team):
         if self.home_team == team:
             return self.away_team

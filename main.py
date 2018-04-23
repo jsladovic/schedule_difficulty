@@ -65,8 +65,11 @@ if need_stats:
 
     browser.close_browser()
 
-matches_by_team = get_cached_data(cache_path, teams)
-analyzer = Analyzer(matches_by_team)
 competition = 'Premier League'
+matches_by_team = get_cached_data(cache_path, teams)
+analyzer = Analyzer(matches_by_team, competition)
 #analyzer.calculate_time_between_matches(competition)
-analyzer.calculte_point_averages(competition, 5, 5)
+#analyzer.calculte_average_points_around_matches(2, 2)
+#analyzer.calculate_expected_points_for_matches()
+analyzer.calculate_schedule_difficulty()
+
