@@ -17,7 +17,7 @@ class Browser():
         print('closed')
 
     def get_page(self, url):
-        print('getting page')
+        print('getting page: ' + url)
         self.browser.get(url)
 
     def find_by_xpath(self, xpath):

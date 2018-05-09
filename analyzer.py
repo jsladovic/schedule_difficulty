@@ -11,6 +11,14 @@ class Analyzer:
         self.home_point_averages = self.calculate_average_points(True)
         self.away_point_averages = self.calculate_average_points(False)
 
+        print '\nHome point averages:'
+        for team in self.sort_dictionary(self.home_point_averages, True):
+            print team[0] + ' -> ' + str(round(team[1], 2))
+
+        print '\nAway point averages:'
+        for team in self.sort_dictionary(self.away_point_averages, True):
+            print team[0] + ' -> ' + str(round(team[1], 2))
+
     def matches_in_competition(self, team):
         return [match for match in self.matches_by_team[team] if match.tournament == self.competition]
 
@@ -37,7 +45,7 @@ class Analyzer:
                 difficulty_sum += opposition_match.difficulty
             difficulties.append((team, difficulty_sum / len(matches)))
 
-        difficulties = self.sort(difficulties, True)
+        difficulties = self.sort_array(difficulties, True)
         for i in range(0, len(difficulties)):
             print str(i + 1) + '. ' + difficulties[i][0] + '\t\t' + str(round(difficulties[i][1], 2))
 
@@ -143,7 +151,7 @@ class Analyzer:
             opposition_average_rest = opposition_total_rest/count
             teams_rest_difference.append((team, team_average_rest - opposition_average_rest))
 
-        teams_rest_difference = self.sort(teams_rest_difference)
+        teams_rest_difference = self.sort_array(teams_rest_difference)
         for i in range(0, len(teams_rest_difference)):
             print str(i + 1) + '. ' + teams_rest_difference[i][0] + ' rest average: ' + str(round(teams_rest_difference[i][1], 2))            
 
@@ -157,5 +165,8 @@ class Analyzer:
 
             return (match.date.date() - self.matches_by_team[team][i - 1].date.date()).days - 1
             
-    def sort(self, array, rev = False):
+    def sort_array(self, array, rev = False):
         return sorted(array, key = lambda x: x[1], reverse = rev)
+
+    def sort_dictionary(self, dictionary, rev = False):
+        return sorted(dictionary.iteritems(), key = lambda x : x[1], reverse = rev)

@@ -23,7 +23,7 @@ class Crawler:
             # match hasn't been played yet
             return None
 
-        tournament = node.find_elements_by_class_name('tournament')[0].find_elements_by_tag_name('a')[0].get_attribute('textContent')
+        tournament = node.find_elements_by_class_name('tournament')[0].get_attribute('textContent').split('\n')[1].strip()
         date = self.parse_date(node.find_elements_by_class_name('dateTime')[0].find_elements_by_class_name('hide')[0].get_attribute('textContent'))
         home_team = node.find_elements_by_class_name('homeTeam')[0].text
         away_team = node.find_elements_by_class_name('awayTeam')[0].text
