@@ -16,7 +16,11 @@ class Match:
         self.away_team = dictionary['away_team']
         self.home_score = dictionary['home_score']
         self.away_score = dictionary['away_score']
+        
+    def to_string(self):
+        return self.home_team + ' (' + str(self.home_score) + ':' + str(self.away_score) + ') ' + self.away_team
 
+    # to be used for more detailed printing
     def __str__(self):
         return str(self.date) + ' ' + self.tournament + ' ' + self.home_team + ' (' + str(self.home_score) + ':' + str(self.away_score) + ') ' + self.away_team
 

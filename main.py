@@ -80,7 +80,7 @@ def get_cached_data(cache_path, teams):
     return dictionary
 
 need_stats = False
-competition, teams = get_teams_ligue_1()
+competition, teams = get_teams_premier_league()
 cache_path = 'cache/' + competition.replace(' ', '_') + '/2017-2018/'
 
 if need_stats:
@@ -100,7 +100,7 @@ if need_stats:
     browser.close_browser()
 
 matches_by_team = get_cached_data(cache_path, teams)
-analyzer = Analyzer(matches_by_team, competition)
+analyzer = Analyzer(matches_by_team, competition, True)
 #analyzer.calculate_time_between_matches(competition)
 #analyzer.calculte_average_points_around_matches(2, 2)
 #analyzer.calculate_expected_points_for_matches()

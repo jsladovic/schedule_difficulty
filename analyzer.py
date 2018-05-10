@@ -1,16 +1,19 @@
 
 from __future__ import division
 from datetime import datetime
+from tabulate import tabulate
 import operator
 
 class Analyzer:
-    def __init__(self, matches, competition):
+    def __init__(self, matches, competition, detailed_output = False):
+        self.detailed_output = detailed_output
         self.matches_by_team = matches
         self.competition = competition
         self.point_averages = self.calculate_average_points()
         self.home_point_averages = self.calculate_average_points(True)
-        self.away_point_averages = self.calculate_average_points(False)
+        self.away_point_averages = self.calculate_average_points(False)     
 
+    def print_point_averages(self):
         print '\nHome point averages:'
         for team in self.sort_dictionary(self.home_point_averages, True):
             print team[0] + ' -> ' + str(round(team[1], 2))
@@ -23,6 +26,10 @@ class Analyzer:
         return [match for match in self.matches_by_team[team] if match.tournament == self.competition]
 
     def calculate_schedule_difficulty(self):
+        print '\n' + self.competition
+        if self.detailed_output:
+            self.print_point_averages()
+
         self.calculate_expected_points_for_matches()
         self.calculte_average_points_around_matches(2, 2, True)
         for team in self.matches_by_team:
@@ -36,18 +43,33 @@ class Analyzer:
                 #matches[i].difficulty = difficulty + 1
                 matches[i].difficulty = int(5 * (i / len(matches)) + 1)
 
-        difficulties = []
+        difficulties = []            
         for team in self.matches_by_team:
+            if self.detailed_output:
+                print '\n' + team
+                print ','.join(['date', 'match', 'expected points', 'self difficulty', 'opposition difficulty'])
+                
             matches = self.matches_in_competition(team)
             difficulty_sum = 0
             for match in matches:
                 opposition_match = [m for m in  self.matches_in_competition(match.other_team(team)) if m == match][0]
                 difficulty_sum += opposition_match.difficulty
+                if self.detailed_output:
+                    print ','.join([match.date.strftime('%d.%m.%Y %H:%M'), match.to_string(), \
+                                    str(round(match.expected_points, 2)), str(match.difficulty), \
+                                    str(opposition_match.difficulty)])
             difficulties.append((team, difficulty_sum / len(matches)))
 
-        difficulties = self.sort_array(difficulties, True)
+        self.print_table(self.sort_array(difficulties, True))
+
+    def print_table(self, difficulties):
+        print '\nTeams sorted by schedule difficulty (starting with most difficult):'
+        header = ['position', 'team', 'difficulty index']
+        table = []
         for i in range(0, len(difficulties)):
-            print str(i + 1) + '. ' + difficulties[i][0] + '\t\t' + str(round(difficulties[i][1], 2))
+            table.append([i + 1, difficulties[i][0], difficulties[i][1]])
+
+        print tabulate(table, headers = header, floatfmt = '.2f')        
 
     def calculate_average_points(self, home = None):
         teams = {}
